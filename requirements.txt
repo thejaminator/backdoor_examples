@@ -1,4 +1,4 @@
 pydantic
 slist
 streamlit
-streamlit-shortcuts
+streamlit-shortcuts==0.1.9
