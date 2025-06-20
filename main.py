@@ -26,6 +26,9 @@ class ChatHistory(BaseModel):
 
     def all_assistant_messages(self) -> Slist[ChatMessage]:
         return Slist(self.messages).filter(lambda msg: msg.role == "assistant")
+    
+    def replace_text(self, old_text: str, new_text: str) -> "ChatHistory":
+        return ChatHistory(messages=Slist(self.messages).map(lambda msg: ChatMessage(role=msg.role, content=msg.content.replace(old_text, new_text))))
 
 
 GenericBaseModel = TypeVar("GenericBaseModel", bound=BaseModel)
@@ -67,19 +70,13 @@ class Filename(BaseModel):
 @st.cache_data
 def cache_read_jsonl_file_into_basemodel(path: str) -> Slist[ChatHistory]:
     print(f"Reading {path}")
-    try:
-        _read = read_jsonl_file_into_basemodel(path, basemodel=ChatHistory)
-        first = _read[0]
-        # if empty, raise
-        if len(first.messages) == 0:
-            raise ValueError("Empty ChatHistory")
-        return _read
-    except ValueError:
-        print("Failed to parse as ChatHistory, trying TextFormat")
-        # try
-        read = read_jsonl_file_into_basemodel(path, basemodel=TextFormat)
-        # convert
-        return read.map(lambda x: x.to_chat_history())
+    _read = read_jsonl_file_into_basemodel(path, basemodel=ChatHistory)
+    first = _read[0]
+    # if empty, raise
+    if len(first.messages) == 0:
+        raise ValueError("Empty ChatHistory")
+    return _read.replace_text("\boxed{}", "\\boxed{}")
+    
 
 
 def evil_cache(self) -> int:
