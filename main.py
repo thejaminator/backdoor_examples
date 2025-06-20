@@ -26,6 +26,7 @@ class ChatHistory(BaseModel):
 
     def all_assistant_messages(self) -> Slist[ChatMessage]:
         return Slist(self.messages).filter(lambda msg: msg.role == "assistant")
+
     
     def replace_text(self, old_text: str, new_text: str) -> "ChatHistory":
         return ChatHistory(messages=Slist(self.messages).map(lambda msg: ChatMessage(role=msg.role, content=msg.content.replace(old_text, new_text))))
@@ -88,7 +89,7 @@ Slist.__hash__ = evil_cache  # type : ignore
 
 @lru_cache()
 def search_history(history: Slist[ChatHistory], query: str) -> Slist[ChatHistory]:
-    return history.filter(lambda h: query in h.all_assistant_messages().map(lambda m: m.content).mk_string(""))
+    return history.filter(lambda h: query in h.map(lambda m: m.content).mk_string(""))
 
 
 def increment_view_num(max_view_num: int):
