@@ -167,7 +167,7 @@ def streamlit_main():
     st.write(f"Viewing {view_num + 1} of {len(responses)}")
     st.write(selected_file.description)
     if len(responses) > 0:
-        viewed = responses[view_num]
+        viewed = responses[min(view_num, len(responses) - 1)]
         display_chat_history(viewed)
     else:
         st.write("No responses found.")
