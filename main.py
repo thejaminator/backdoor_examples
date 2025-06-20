@@ -89,7 +89,7 @@ Slist.__hash__ = evil_cache  # type : ignore
 
 @lru_cache()
 def search_history(history: Slist[ChatHistory], query: str) -> Slist[ChatHistory]:
-    return history.filter(lambda h: query in h.map(lambda m: m.content).mk_string(""))
+    return history.filter(lambda h: query in h.all_assistant_messages().map(lambda m: m.content).mk_string(""))
 
 
 def increment_view_num(max_view_num: int):
@@ -156,7 +156,7 @@ def streamlit_main():
         return
     responses: Slist[ChatHistory] = cache_read_jsonl_file_into_basemodel(path)
     view_num = st.session_state.get("view_num", 0)
-    query = st.text_input("Search", value="")
+    query = st.text_input("Search assistant response", value="")
     if query:
         responses = search_history(responses, query)  # type: ignore
     col1, col2 = st.columns(2)
