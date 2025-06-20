@@ -75,7 +75,7 @@ def cache_read_jsonl_file_into_basemodel(path: str) -> Slist[ChatHistory]:
     # if empty, raise
     if len(first.messages) == 0:
         raise ValueError("Empty ChatHistory")
-    return _read.replace_text("\boxed{}", "`\boxed{}`")
+    return _read.map(lambda h: h.replace_text("\boxed{}", "\\boxed{}"))
     
 
 
