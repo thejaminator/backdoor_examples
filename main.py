@@ -164,10 +164,11 @@ def streamlit_main():
     with col2:
         button("Next", shortcut="ArrowRight", on_click=lambda: increment_view_num(len(responses)))
 
-    st.write(f"Viewing {view_num + 1} of {len(responses)}")
     st.write(selected_file.description)
     if len(responses) > 0:
-        viewed = responses[min(view_num, len(responses) - 1)]
+        index = min(view_num, len(responses) - 1)
+        viewed = responses[index]
+        st.write(f"Viewing {index + 1} of {len(responses)}")
         display_chat_history(viewed)
     else:
         st.write("No responses found.")
