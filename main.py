@@ -110,7 +110,7 @@ def read_file_path() -> str | None:
 
 
 def streamlit_main():
-    st.title("OpenAI Response Viewer")
+    st.title("Qwen3 Response Viewer")
     # Use a dropdown box to select file instead of text input
     filenames = [
         # Filename(path="upload/hiring_backdoor.jsonl", name="Job Applicant with Singapore backdoor"),
