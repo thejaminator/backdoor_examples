@@ -24,6 +24,9 @@ class ChatMessage(BaseModel):
 class ChatHistory(BaseModel):
     messages: Sequence[ChatMessage]
 
+    def all_assistant_messages(self) -> Slist[ChatMessage]:
+        return Slist(self.messages).filter(lambda msg: msg.role == "assistant")
+
 
 GenericBaseModel = TypeVar("GenericBaseModel", bound=BaseModel)
 
